@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+{% block title %}Profile{% endblock %}
+{% block content %}
+<h2>{{ user.username }}'s Profile</h2>
+{% if user.profile.avatar %}
+  <img src="{{ user.profile.avatar.url }}" alt="Avatar" width="150">
+{% endif %}
+<p>{{ user.profile.bio }}</p>
+<a href="{% url 'profile_edit' %}">Edit Profile</a>
+{% endblock %}

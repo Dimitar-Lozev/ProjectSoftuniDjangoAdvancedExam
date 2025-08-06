@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+{% block title %}{{ object.title }}{% endblock %}
+{% block content %}
+<h1>{{ object.title }}</h1>
+<p>{{ object.description }}</p>
+{% if object.image %}
+  <img src="{{ object.image.url }}" alt="Image">
+{% endif %}
+<p>By {{ object.author.username }}</p>
+<p>Category: {{ object.category.name }}</p>
+
+{% if user == object.author %}
+  <a href="{% url 'recipe_edit' object.pk %}">Edit</a> |
+  <a href="{% url 'recipe_delete' object.pk %}">Delete</a>
+{% endif %}
+
+<h3>Comments</h3>
+<ul>
+  {% for comment in object.comments.all %}
+    <li><strong>{{ comment.author.username }}:</strong> {{ comment.content }}</li>
+  {% empty %}
+    <li>No comments yet.</li>
+  {% endfor %}
+</ul>
+
+{% if user.is_authenticated %}
+  <h4>Add Comment</h4>
+  <form method="post">
+    {% csrf_token %}
+    {{ comment_form.as_p }}
+    <button type="submit" name="comment">Post</button>
+  </form>
+
+  <h4>Rate this Recipe</h4>
+  <form method="post">
+    {% csrf_token %}
+    {{ rating_form.as_p }}
+    <button type="submit" name="rating">Rate</button>
+  </form>
+{% endif %}
+{% endblock %}
